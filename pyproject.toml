@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sal-resolution"
+version = "0.1.0"
+description = "Symbolic vs dynamical downscaling of BoM precipitation forecasts, evaluated with SAL"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "xarray>=2024.1",
+    "netcdf4>=1.6",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+symbolic = ["pysr>=0.19"]
+scores = ["scores>=2.5"]
+dev = ["pytest>=8.0", "pytest-cov>=5.0", "ruff>=0.5"]
+
+[project.scripts]
+sal-resolution = "sal_resolution.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "RUF", "BLE", "C4", "SIM"]
+ignore = [
+    "B008",     # dataclass defaults as function-call defaults are intentional here
+    "RUF002",   # unicode in docstrings (mathematical symbols)
+    "RUF003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["BLE001"]
